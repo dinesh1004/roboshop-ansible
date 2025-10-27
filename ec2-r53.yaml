@@ -1,3 +1,4 @@
+#install packages before creating servers {pip3.9 install boto3 botocore}
 - name : ec2 and r53 creation 
   hosts : native
   connection : local
