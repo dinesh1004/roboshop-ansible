@@ -7,7 +7,7 @@
     Zone_id : Z05339043BT9MD1FV3PVX
     dns_name : suneel.shop
     # we can pass instances through command line using -e
-    # ansible-playbook -i inventory.ini 1.ec2-r53.yaml -e "instances=['catalogue','mysql','rabbitmq']"
+    # ansible-playbook -i inventory.ini 1.ec2-r53.yaml -e "instances=[]"
     # instances: 
     # - mongodb
     # - redis
