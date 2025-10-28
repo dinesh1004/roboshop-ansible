@@ -42,9 +42,9 @@
 
     - name: Extract catalogue.zip into the /app directory
       ansible.builtin.unarchive:
-      src: /tmp/catalogue.zip      # The path to the archive file on the remote host
-      dest: /app                   # The destination directory for the extracted contents
-      remote_src: yes
+        src: /tmp/catalogue.zip      # The path to the archive file on the remote host
+        dest: /app                   # The destination directory for the extracted contents
+        remote_src: yes
     
     - name : installing dependencies
       community.general.npm:
