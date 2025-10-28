@@ -55,8 +55,6 @@
       ansible.builtin.copy:
         src : catalogue.service
         dest : /etc/systemd/system/catalogue.service
-      notify: 
-        - Unmask and Restart Catalogue Service
     
     - name : copying mongo repo
       ansible.builtin.copy:
