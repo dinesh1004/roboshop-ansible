@@ -18,8 +18,6 @@
         enabled : yes
         state : started
 
-    - name : adding roboshop user
-
     
     - name: adding user and providing permissions
       community.rabbitmq.rabbitmq_user:
