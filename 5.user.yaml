@@ -23,10 +23,10 @@
         path : /app
         state : absent 
     
-    - name : creating 
+    - name : creating app
       ansible.builtin.file:
         path : /app
-        state : present
+        state : touch
 
     - name: Delete user file
       ansible.builtin.file:
