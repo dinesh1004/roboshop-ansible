@@ -9,7 +9,7 @@
     - name : installing nodejs
       ansible.builtin.package:
         name : nodejs 
-        present: yes
+        state : present 
     - name: creating roboshop user
       ansible.builtin.user:
         name: roboshop
