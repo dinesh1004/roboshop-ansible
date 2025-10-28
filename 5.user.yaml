@@ -53,7 +53,7 @@
         dest : /etc/systemd/system/user.service
     
     - name : reloading user
-      ansbile.builtin.systemd_service:
+      ansible.builtin.systemd_service:
         name : user 
         enabled : yes
         state : started
