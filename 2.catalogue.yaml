@@ -152,6 +152,10 @@
     ansible.builtin.copy:
       src: catalogue.service
       dest: /etc/systemd/system/catalogue.service
+  - name: Ensure catalogue service is UNMASKED (Solves your recurring failure)
+    ansible.builtin.systemd:
+      name: catalogue
+      masked: no
 
   - name: copy mongo repo
     ansible.builtin.copy:
