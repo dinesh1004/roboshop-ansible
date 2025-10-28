@@ -11,7 +11,7 @@
         name : mongodb-org
         state : present
     - name : alllow remote connections
-      ansible.builtin.lineinfile:
+      ansible.builtin.replace:
         path : /etc/mongod.conf
         regexp : '127.0.0.1'
         replace :  '0.0.0.0'
