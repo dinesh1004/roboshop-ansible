@@ -87,11 +87,11 @@
       when : catalogue_output.stdout | int < 0
 
     - name: Force systemd to reload all unit files (daemon-reload)
-      ansible.builtin.systemd:
+      ansible.builtin.systemd_service:
         name : catalogue
-        enabled : yes
+        enabled : true
         state : started
-        daemon_reload: yes
+        daemon_reload: true
         
 
 
