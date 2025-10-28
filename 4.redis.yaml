@@ -10,7 +10,7 @@
       ansible.builtin.command: dnf install redis -y 
     
     - name : enabling enternal traffic
-      ansible.built.replace:
+      ansible.builtin.replace:
         regexp : '127.0.0.1'
         raplce : '0.0.0.0'
     
