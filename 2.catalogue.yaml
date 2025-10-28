@@ -55,6 +55,8 @@
       ansible.builtin.copy:
         src : catalogue.service
         dest : /etc/systemd/system/catalogue.service
+      notify: 
+        - Unmask and Restart Catalogue Service
     
     - name : copying mongo repo
       ansible.builtin.copy:
@@ -86,10 +88,6 @@
       ansible.builtin.shell: mongosh --host mongodb.suneel.shop </app/db/master-data.js
       when : catalogue_output.stdout | int < 0
 
-    - name: Unmask the catalogue service
-      ansible.builtin.systemd:
-        name: catalogue
-        masked: no
 
     - name: Force systemd to reload all unit files (daemon-reload)
       ansible.builtin.systemd_service:
@@ -97,6 +95,7 @@
         enabled : true
         state : started
         daemon_reload: true
+    
         
 
 
