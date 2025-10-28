@@ -13,7 +13,7 @@
       ansible.builtin.replace:
         path : /etc/redis/redis.conf
         regexp : '127.0.0.1'
-        raplce : '0.0.0.0'
+        replace : '0.0.0.0'
     
     - name : changing protected mode 
       ansible.builtin.lineinfile:
