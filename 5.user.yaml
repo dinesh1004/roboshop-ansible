@@ -19,12 +19,12 @@
         home: /app 
     
     - name : removing app 
-      ansible.builtin.service:
+      ansible.builtin.file:
         path : /app
         state : absent 
     
     - name : creating 
-      ansible.builtin.service:
+      ansible.builtin.file:
         path : /app
         state : present
 
