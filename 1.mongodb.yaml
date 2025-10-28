@@ -14,7 +14,7 @@
       ansible.builtin.lineinfile:
         path : /etc/mongod.conf
         regexp : '127.0.0.1'
-        raplce :  '0.0.0.0'
+        replace :  '0.0.0.0'
     - name : restarting mongodb services
       ansible.builtin.service:
         name : mongod
