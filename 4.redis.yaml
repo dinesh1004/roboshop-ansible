@@ -9,8 +9,9 @@
     - name : installing resid
       ansible.builtin.command: dnf install redis -y 
     
-    - name : enabling enternal traffic
+    - name : enabling external traffic
       ansible.builtin.replace:
+        path : /etc/redis/redis.conf
         regexp : '127.0.0.1'
         raplce : '0.0.0.0'
     
