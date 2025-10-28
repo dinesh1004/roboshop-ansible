@@ -55,10 +55,6 @@
       ansible.builtin.copy :
         src : catalogue.service
         dest : /etc/systemd/system/catalogue.service
-        owner: root
-        group: root
-        mode: '0644'
-      become : yes 
     
     - name : copying mongo repo
       ansible.builtin.copy:
