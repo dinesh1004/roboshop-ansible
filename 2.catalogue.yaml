@@ -1,175 +1,76 @@
-# - name : setting up catalogue 
-#   hosts : catalogue
-#   become : yes 
-#   tasks : 
-#     - name : disabling nodejs
-#       ansible.builtin.command: dnf module disable nodejs -y
-#     - name : enabling nodejs:20
-#       ansible.builtin.command : dnf module enable nodejs:20 -y
-#     - name : installing nodejs
-#       ansible.builtin.package:
-#         name : nodejs 
-#         state: present
-#     - name: creating roboshop user
-#       ansible.builtin.user:
-#         name: roboshop
-#         comment : Roboshop system user
-#         system: true
-#         shell: /sbin/nologin
-#         home: /app 
+- name : setting up catalogue 
+  hosts : catalogue
+  become : yes 
+  tasks : 
+    - name : disabling nodejs
+      ansible.builtin.command: dnf module disable nodejs -y
+    - name : enabling nodejs:20
+      ansible.builtin.command : dnf module enable nodejs:20 -y
+    - name : installing nodejs
+      ansible.builtin.package:
+        name : nodejs 
+        state: present
+    - name: creating roboshop user
+      ansible.builtin.user:
+        name: roboshop
+        comment : Roboshop system user
+        system: true
+        shell: /sbin/nologin
+        home: /app 
   
-#    # Safe to remove directory, because 2nd time if we run it will download freshly. no error if does not exist
+   # Safe to remove directory, because 2nd time if we run it will download freshly. no error if does not exist
 
-#     - name: Removing th app directory
-#       ansible.builtin.file:
-#         path: /app # The path to the directory you want to remove
-#         state: absent
+    - name: Removing th app directory
+      ansible.builtin.file:
+        path: /app # The path to the directory you want to remove
+        state: absent
 
-#     - name: creating app directory
-#       ansible.builtin.file:
-#         path: /app
-#         state: directory
+    - name: creating app directory
+      ansible.builtin.file:
+        path: /app
+        state: directory
 
-#     - name: Delete catalogue file
-#       ansible.builtin.file:
-#         path: /tmp/catalogue.zip
-#         state: absent
+    - name: Delete catalogue file
+      ansible.builtin.file:
+        path: /tmp/catalogue.zip
+        state: absent
 
-#     - name: Downloading the application
-#       ansible.builtin.get_url:
-#         url: https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip  # The source URL
-#         dest: /tmp/catalogue.zip
+    - name: Downloading the application
+      ansible.builtin.get_url:
+        url: https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip  # The source URL
+        dest: /tmp/catalogue.zip
 
-#     - name: Extract catalogue.zip into the /app directory
-#       ansible.builtin.unarchive:
-#         src: /tmp/catalogue.zip      # The path to the archive file on the remote host
-#         dest: /app                   # The destination directory for the extracted contents
-#         remote_src: yes
+    - name: Extract catalogue.zip into the /app directory
+      ansible.builtin.unarchive:
+        src: /tmp/catalogue.zip      # The path to the archive file on the remote host
+        dest: /app                   # The destination directory for the extracted contents
+        remote_src: yes
     
-#     - name : installing dependencies
-#       community.general.npm:
-#         path : /app 
-#         state : present
+    - name : installing dependencies
+      community.general.npm:
+        path : /app 
+        state : present
 
-#     - name : copying catalogue.services
-#       ansible.builtin.copy:
-#         src : catalogue.service
-#         dest : /etc/systemd/system/catalogue.service
+    - name : copying catalogue.services
+      ansible.builtin.copy :
+        src : catalogue.service
+        dest : /etc/systemd/system/catalogue.service
     
-#     - name : copying mongo repo
-#       ansible.builtin.copy:
-#         src : mongo.repo
-#         dest : /etc/yum.repos.d/mongo.repo
+    - name : copying mongo repo
+      ansible.builtin.copy:
+        src : mongo.repo
+        dest : /etc/yum.repos.d/mongo.repo
     
-#     - name : installing mongodb client
-#       ansible.builtin.package:
-#         name : mongodb-mongosh
-#         state : present 
+    - name : installing mongodb client
+      ansible.builtin.package:
+        name : mongodb-mongosh
+        state : present 
     
     
 
-#     - name: connnect to mongodb catalogue
-#       ansible.builtin.command: mongosh mongodb.suneel.shop --quiet --eval "db.getMongo().getDBNames().indexOf('catalogue')"
-#       register: catalogue_output
-
-#   # - name: evaluate cataalogue database
-#   #   community.mongodb.mongodb_shell:
-#   #     login_host: mongodb.daws86s.fun
-#   #     eval: db.getMongo().getDBNames().indexOf('catalogue')
-#   #   register: catalogue_output
-
-#   # - name: print catalogue output
-#   #   ansible.builtin.debug:
-#   #     msg: "{{ catalogue_output }}"
-
-#     - name : loading data in to mongodb server
-#       ansible.builtin.shell: mongosh --host mongodb.suneel.shop </app/db/master-data.js
-#       when : catalogue_output.stdout | int < 0
-
-
-#     - name: Force systemd to reload all unit files (daemon-reload)
-#       ansible.builtin.systemd_service:
-#         name : catalogue
-#         enabled : true
-#         state : started
-#         daemon_reload: true
-    
-        
-- name: setup catalogue server
-  hosts: catalogue
-  become: yes
-  tasks:
-  - name: disable default nodejs
-    ansible.builtin.command: dnf module disable nodejs -y
-
-  - name: enable nodejs 20
-    ansible.builtin.command: dnf module enable nodejs:20 -y
-
-  - name: install nodejs
-    ansible.builtin.package:
-      name: nodejs
-      state: present
-
-  - name: create roboshop system user
-    ansible.builtin.user:
-      name: roboshop
-      comment: RoboShop System user
-      system: true
-      shell: /sbin/nologin
-      home: /app
-  # Safe to remove directory, because 2nd time if we run it will download freshly. no error if does not exist
-  - name: remove app directory
-    ansible.builtin.file:
-      path: /app
-      state: absent
-
-  - name: create app directory
-    ansible.builtin.file:
-      state: directory
-      path: /app
-
-  - name: Delete catalogue file
-    ansible.builtin.file:
-      path: /tmp/catalogue.zip
-      state: absent
-
-  - name: download catalogue application
-    ansible.builtin.get_url:
-      url: https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip
-      dest: /tmp/catalogue.zip
-
-  - name: extract catalogue application
-    ansible.builtin.unarchive:
-      src: /tmp/catalogue.zip
-      dest: /app
-      remote_src: yes
-
-  - name: install dependencies
-    community.general.npm:
-      path: /app
-
-  - name: copy catalogue service
-    ansible.builtin.copy:
-      src: catalogue.service
-      dest: /etc/systemd/system/catalogue.service
-  - name: Ensure catalogue service is UNMASKED (Solves your recurring failure)
-    ansible.builtin.systemd:
-      name: catalogue
-      masked: no
-
-  - name: copy mongo repo
-    ansible.builtin.copy:
-      src: mongo.repo
-      dest: /etc/yum.repos.d/mongo.repo
-
-  - name: install mongodb client
-    ansible.builtin.package:
-      name: mongodb-mongosh
-      state: present
-
-  - name: connnect to mongodb catalogue
-    ansible.builtin.command: mongosh mongodb.suneel.shop --quiet --eval "db.getMongo().getDBNames().indexOf('catalogue')"
-    register: catalogue_output
+    - name: connnect to mongodb catalogue
+      ansible.builtin.command: mongosh mongodb.suneel.shop --quiet --eval "db.getMongo().getDBNames().indexOf('catalogue')"
+      register: catalogue_output
 
   # - name: evaluate cataalogue database
   #   community.mongodb.mongodb_shell:
@@ -181,22 +82,17 @@
   #   ansible.builtin.debug:
   #     msg: "{{ catalogue_output }}"
 
-  - name: load products into mongodb
-    ansible.builtin.shell: mongosh --host mongodb.suneel.shop </app/db/master-data.js
-    when: catalogue_output.stdout | int < 0
-
-  # - name: start and enable cataalogue
-  #   ansible.builtin.service:
-  #     name: catalogue
-  #     enabled: yes
-  #     state: started
-
-  - name: daemon reload enable and start
-    ansible.builtin.systemd_service:
-      name: catalogue
-      enabled: true
-      state: started
-      daemon_reload: true
-  
+    - name : loading data in to mongodb server
+      ansible.builtin.shell: mongosh --host mongodb.suneel.shop </app/db/master-data.js
+      when : catalogue_output.stdout | int < 0
 
 
+    - name: Force systemd to reload all unit files (daemon-reload)
+      ansible.builtin.systemd_service:
+        name : catalogue
+        masked : no 
+        enabled : true
+        state : started
+        daemon_reload: true
+    
+        
